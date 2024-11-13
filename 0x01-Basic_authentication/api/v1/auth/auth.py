@@ -14,7 +14,25 @@ class Auth():
         """
         It determines if authentication is required for a gicen path
         """
-        return False
+        # Return True if path is None
+        if path is None:
+            return True
+
+        # Return True if excluded_paths is None or empty
+        if not excluded_paths:
+            return True
+
+        # Normalize path to ensure it ends with a slash
+        if not path.endswith('/'):
+            path += '/'
+
+        # Check if the normalized path is in the excluded_paths
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('/') and path == excluded_path:
+                return False
+
+        # If no match found, return True indicating auth is required
+        return True
 
     def authorization_header(self, request=None) -> str:
         """
