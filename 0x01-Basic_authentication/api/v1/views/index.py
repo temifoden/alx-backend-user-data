@@ -30,3 +30,9 @@ def unauthorized_endpoint():
     """GET /unauthorized/
     Raises a 401 unauthorized errror"""
     abort(401)
+  
+@app_views.route('/forbidden/', methods=['GET'], strict_slashes=False)
+def forbidden_endpoint():
+    """GET /forbidden/
+    Forbidden request"""
+    abort(403)
