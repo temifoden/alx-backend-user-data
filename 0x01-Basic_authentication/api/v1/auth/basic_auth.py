@@ -4,7 +4,7 @@
 from api.v1.auth.auth import Auth
 import base64
 from models.user import User
-from typing import TypeVar
+from typing import TypeVar, Optional
 
 
 class BasicAuth(Auth):
@@ -96,3 +96,36 @@ class BasicAuth(Auth):
 
         # Return the User instance
         return user
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Overloads Auth's  current_user method to retrieve User instance
+        """
+        # Get the Authorization header from the request
+        auth_header = self.authorization_header(request)
+        if not auth_header:
+            return None
+
+        # Extract the Base64 part from the authorization header
+        base64_auth = self.extract_base64_authorization_header(auth_header)
+        if not base64_auth:
+            return None
+
+        # Decode the base64 string
+        decoded_auth = self.decode_base64_authorization_header(base64_auth)
+        if not decoded_auth:
+            return None
+
+        # Extract user credentials (email and password)
+        email, password = self.extract_user_credentials(decoded_auth)
+        if not email or not password:
+            return None
+
+        try:
+            # Get the user object using the extracted credentials
+            user = self.user_object_from_credentials(email, password)
+            print(f"User Object:{user}")
+            return user
+        except Exception as e:
+            print(f"Error retrieving user: {e}")
+            return None
