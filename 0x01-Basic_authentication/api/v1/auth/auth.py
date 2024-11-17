@@ -12,7 +12,7 @@ class Auth():
     """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
-        It determines if authentication is required for a gicen path
+        It determines if authentication is required for a given path
         """
         # Return True if path is None
         if path is None:
@@ -38,7 +38,9 @@ class Auth():
         """
         Retrieves the Authorization header from the request
         """
-        return None
+        if request is None:
+            return None
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
