@@ -85,7 +85,7 @@ class BasicAuth(Auth):
         users = User.search({'email': user_email})
 
         # Explicitly check if users is None or empty
-        if users is None or len(users) == 0:
+        if  not users:
             return None
 
         # Check the password
