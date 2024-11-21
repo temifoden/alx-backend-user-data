@@ -5,7 +5,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-
 from user import Base, User
 
 
@@ -42,6 +41,8 @@ class DB:
         User: The created User Object
         """
         try:
+            if  not email or not hashed_password:
+                return
             # Create a new User object
             new_user = User(email=email, hashed_password=hashed_password)
             # Add the user to the session
